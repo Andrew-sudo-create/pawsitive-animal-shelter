@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawsitive</title>
+    <!-- Google Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- My CSS -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- ======================================================
+     HEADER
+     This contains the logo and navigation menu.
+======================================================= -->
+
+<header>
+
+    <div class="container">
+
+        <nav>
+
+            <!-- Website Logo -->
+
+            <a href="home.html" class="logo">
+
+                <img src="images/logo.png" alt="Pawsitive Logo">
+
+            </a>
+
+            <!-- Navigation Links -->
+
+            <ul class="nav-links">
+
+                <li><a href="home.html">Home</a></li>
+
+                <li><a href="about.html">About</a></li>
+
+                <li><a href="dogs.html">Meet Our Dogs</a></li>
+
+                
+
+                <li><a href="contact.html" class="active">Contact Us</a></li>
+
+            </ul>
+
+            <!-- Donate Button -->
+
+            <a href="donate.html" class="btn nav-btn">
+
+                Donate
+
+            </a>
+
+            <!-- Hamburger Icon -->
+
+            <div class="menu-btn">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </div>
+
+        </nav>
+
+    </div>
+
+</header>
+<main>
+
+    <!-- ==========================================
+     CONTACT HERO
+========================================== -->
+
+<section class="page-hero contact-hero">
+
+    <div class="page-hero-overlay">
+
+        <div class="container">
+
+            <div class="page-hero-content">
+
+                <span class="section-tag">
+
+                    WE'D LOVE TO HEAR FROM YOU
+
+                </span>
+
+                <h1>
+
+                    Contact Us
+
+                </h1>
+
+                <p>
+
+                    Whether you're looking to adopt, volunteer,
+                    donate or simply have a question, we're here
+                    to help.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+     CONTACT INFORMATION
+========================================== -->
+<section class="contact-page">
+    <div class="container contact-page-grid">
+        <div class="contact-form-card">
+            <div class="section-title">
+                <span class="section-tag">SEND US A MESSAGE</span>
+                <h2>We'd Love To Hear From You</h2>
+                <p>Complete the form below and we'll get back to you as soon as possible.</p>
+            </div>
+            <form id="contactForm" class="contact-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="Enter your phone number">
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" placeholder="Enter a subject">
+                </div>
+                <div class="form-group full-width">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="6" placeholder="Tell us how we can help..." required></textarea>
+                </div>
+                <div class="full-width button-center">
+                    <button type="submit" class="btn">
+                        <i class="fa-solid fa-paper-plane"></i> Send Message
+                    </button>
+                </div>
+            </form>
+        </div>
+        <aside class="contact-sidebar">
+            <div class="contact-sidebar-card">
+                <h2>Contact Information</h2>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div>
+                        <span class="sidebar-label">Address</span>
+                        <p>Plot 143 Pretorius street Laezonia, Centurion, Gauteng, 0026</p>
+                    </div>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div>
+                        <span class="sidebar-label">Phone</span>
+                        <p>+27 76 485 4448</p>
+                    </div>
+                </div>
+                <div class="sidebar-item">
+                    <div class="sidebar-icon"><i class="fa-solid fa-envelope"></i></div>
+                    <div>
+                        <span class="sidebar-label">Email</span>
+                        <p>pawsitiverasa@gmail.com</p>
+                    </div>
+                </div>
+                <div class="sidebar-item sidebar-hours">
+                    <div class="sidebar-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <span class="sidebar-label">Visiting Hours</span>
+                        <p><strong>Tuesday - Saturday:</strong> 9:00 AM - 5:00 PM<br>
+                        <strong>Sunday:</strong> 10:00 AM - 3:00 PM<br>
+                        <strong>Monday:</strong> Closed</p>
+                    </div>
+                </div>
+                <div class="sidebar-alert">
+                    <strong>By Appointment Only</strong>
+                    <p>Please call ahead or email to schedule your visit. This ensures our team can give you proper attention and prepare for your arrival.</p>
+                </div>
+            </div>
+            <div class="contact-sidebar-card contact-follow-card">
+                <h3>Follow Us on Social Media</h3>
+                <p>Stay updated with our latest rescues, adoption success stories, and events!</p>
+                <a href="https://www.facebook.com/p/Pawsitive-Animal-Shelter-61573736377122/" class="social-link"><i class="fab fa-facebook-f"></i> Facebook - @pawsitiveshelter</a>
+                <a href="#" class="social-link"><i class="fab fa-instagram"></i> Instagram - @pawsitiveshelter</a>
+                <div class="contact-note">
+                    <strong>Note:</strong> We receive many inquiries daily. Please allow 24-48 hours for a response. For urgent matters, please call us directly.
+                </div>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<!-- ==========================================
+     LOCATION & OPENING HOURS
+========================================== -->
+
+<section class="location-section">
+
+    <div class="container">
+
+        <div class="location-grid">
+
+            <!-- Google Map -->
+
+            <div class="map-container">
+
+                <h2>Find Us</h2>
+
+                <!-- Replace this iframe with your own Google Maps embed -->
+
+                <iframe
+                    src="https://www.google.com/maps/embed?pb="
+                    allowfullscreen=""
+                    loading="lazy">
+                </iframe>
+
+            </div>
+
+            <!-- Opening Hours -->
+
+            <div class="hours-card">
+
+                <h2>Opening Hours</h2>
+
+                <ul>
+
+                    <li>
+                        <span>Monday</span>
+                        <span>08:00 - 17:00</span>
+                    </li>
+
+                    <li>
+                        <span>Tuesday</span>
+                        <span>08:00 - 17:00</span>
+                    </li>
+
+                    <li>
+                        <span>Wednesday</span>
+                        <span>08:00 - 17:00</span>
+                    </li>
+
+                    <li>
+                        <span>Thursday</span>
+                        <span>08:00 - 17:00</span>
+                    </li>
+
+                    <li>
+                        <span>Friday</span>
+                        <span>08:00 - 17:00</span>
+                    </li>
+
+                    <li>
+                        <span>Saturday</span>
+                        <span>09:00 - 14:00</span>
+                    </li>
+
+                    <li>
+                        <span>Sunday</span>
+                        <span>Closed</span>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+            <!-- About -->
+
+            <div class="footer-column">
+
+                <img src="images/logo.png"
+                     alt="Pawsitive Logo"
+                     class="footer-logo">
+
+                <p>
+
+                    Pawsitive Animal Shelter is a registered NPO and PBO dedicated to rehoming dogs in need.<br>
+                    Every animal deserves love.
+
+                </p>
+
+            </div>
+
+            <!-- Quick Links -->
+
+            <div class="footer-column">
+
+                <h3>Quick Links</h3>
+
+                <ul>
+
+                    <li><a href="home.html">Home</a></li>
+
+                    <li><a href="about.html">About</a></li>
+
+                    <li><a href="dogs.html">Meet Our Dogs</a></li>
+
+                    <li><a href="donate.html">Donate</a></li>
+
+                    <li><a href="contact.html">Contact Us</a></li>
+
+                </ul>
+
+            </div>
+
+            <!-- Contact -->
+
+            <div class="footer-column">
+
+                <h3>Contact</h3>
+
+                <p>Email: pawsitiverasa@gmail.com</p>
+
+                <p>Phone: +27 76 485 4448</p>
+
+                <p>Address: Plot 143 Pretorius street Laezonia, Centurion, Gauteng, 0026</p>
+
+            </div>
+
+            <!-- Social Media -->
+
+            <div class="footer-column">
+
+                <h3>Follow Us</h3>
+
+                <div class="social-icons">
+
+                    <a href="https://www.facebook.com/p/Pawsitive-Animal-Shelter-61573736377122/"><i class="fab fa-facebook-f"></i></a>
+
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="copyright">
+
+            <p>
+
+                © 2026 Pawsitive Animal Shelter. All Rights Reserved.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

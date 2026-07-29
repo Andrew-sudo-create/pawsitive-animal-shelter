@@ -1,0 +1,30 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+.desktop
+.directory
+
+# Development files
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Compiled/Build files
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Environment files
+.env
+.env.local

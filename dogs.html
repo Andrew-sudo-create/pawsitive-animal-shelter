@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet Our Dogs - Pawsitive</title>
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <!-- My CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- ======================================================
+     HEADER
+     This contains the logo and navigation menu.
+======================================================= -->
+
+<header>
+
+    <div class="container">
+
+        <nav>
+
+            <!-- Website Logo -->
+
+            <a href="home.html" class="logo">
+
+                <img src="images/logo.png" alt="Pawsitive Logo">
+
+            </a>
+
+            <!-- Navigation Links -->
+
+            <ul class="nav-links">
+
+                <li><a href="home.html">Home</a></li>
+
+                <li><a href="about.html">About</a></li>
+
+                <li><a href="dogs.html" class="active">Meet Our Dogs</a></li>
+
+                
+
+                <li><a href="contact.html">Contact Us</a></li>
+
+            </ul>
+
+            <!-- Donate Button -->
+
+            <a href="donate.html" class="btn nav-btn">
+
+                Donate
+
+            </a>
+
+            <!-- Hamburger Icon -->
+
+            <div class="menu-btn">
+
+                <i class="fa-solid fa-bars"></i>
+
+            </div>
+
+        </nav>
+
+    </div>
+
+</header>
+
+<main>
+
+    
+
+<!-- ==========================================
+     MAIN CONTENT
+========================================== -->
+
+<!-- ==========================================
+     DOGS HERO
+========================================== -->
+
+<section class="page-hero dogs-hero">
+
+    <div class="page-hero-overlay">
+
+        <div class="container">
+
+            <div class="page-hero-content">
+
+                <span class="section-tag">
+
+                    ADOPT • LOVE • RESCUE
+
+                </span>
+
+                <h1>
+
+                    Meet Our Dogs
+
+                </h1>
+
+                <p>
+
+                    Every dog has a unique story and is waiting for a loving
+                    family. Browse our available dogs and find your perfect
+                    companion today.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ==========================================
+     SEARCH AND FILTER
+========================================== -->
+
+<section class="search-section">
+
+    <div class="container">
+
+        <div class="search-box">
+
+            <!-- Search Bar -->
+
+            <input type="text"
+                   id="searchInput"
+                   placeholder="Search for a dog by name...">
+
+        </div>
+
+        <!-- Filter Buttons -->
+
+        <div class="filter-buttons">
+
+            <button class="filter-btn active" data-filter="all">
+
+                All Dogs
+
+            </button>
+
+            <button class="filter-btn" data-filter="puppy">
+
+                Puppies
+
+            </button>
+
+            <button class="filter-btn" data-filter="adult">
+
+                Adults
+
+            </button>
+
+            <button class="filter-btn" data-filter="senior">
+
+                Seniors
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+    <!-- ==========================================
+         MEET OUR DOGS (Full Page)
+    ========================================== -->
+
+    <section class="dogs-section">
+
+        <div class="container">
+
+            <!-- Dog Cards -->
+
+            <div class="dogs-grid">
+
+                <!-- Dog 1 -->
+                <div class="dog-card" data-category="adult">
+                    <img src="images/dog1.jpg" alt="Max">
+                    <div class="dog-info">
+                        <h3>Max</h3>
+                        <p>Golden retriever, 3 years old. Max is friendly and energetic.</p>
+                        <div class="dog-details">
+                            <div class="detail-item"><span class="label">Breed:</span> <span class="value">Golden Retriever Mix</span></div>
+                            <div class="detail-item"><span class="label">Age:</span> <span class="value">3 years</span></div>
+                            <div class="detail-item"><span class="label">Temperament:</span> <span class="value">Friendly, Energetic, Playful</span></div>
+                            <div class="detail-item"><span class="label">Vaccinated:</span> <span class="value">Yes</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dog 2 -->
+                <div class="dog-card"  data-category="puppy">
+                    <img src="images/dog2.png" alt="Luna">
+                    <div class="dog-info">
+                        <h3>Luna</h3>
+                        <p>Luna is a playful Beagle who loves exploring and meeting new families.</p>
+                        <div class="dog-details">
+                            <div class="detail-item"><span class="label">Breed:</span> <span class="value">Beagle</span></div>
+                            <div class="detail-item"><span class="label">Age:</span> <span class="value">2 years</span></div>
+                            <div class="detail-item"><span class="label">Temperament:</span> <span class="value">Playful, Curious, Social</span></div>
+                            <div class="detail-item"><span class="label">Vaccinated:</span> <span class="value">Yes</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dog 3 -->
+                <div class="dog-card" data-category="adult">
+                    <img src="images/dog3.png" alt="Buddy">
+                    <div class="dog-info">
+                        <h3>Buddy</h3>
+                        <p>Buddy is a gentle Labrador who enjoys cuddles and calm family time.</p>
+                        <div class="dog-details">
+                            <div class="detail-item"><span class="label">Breed:</span> <span class="value">Labrador Retriever</span></div>
+                            <div class="detail-item"><span class="label">Age:</span> <span class="value">4 years</span></div>
+                            <div class="detail-item"><span class="label">Temperament:</span> <span class="value">Gentle, Calm, Loving</span></div>
+                            <div class="detail-item"><span class="label">Vaccinated:</span> <span class="value">Yes</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Repeat items to demonstrate grid (optional) -->
+                <div class="dog-card" data-category="adult">
+                    <img src="images/dog1.jpg" alt="Max">
+                    <div class="dog-info">
+                        <h3>Max</h3>
+                        <p>Golden retriever, 3 years old.</p>
+                        <div class="dog-details">
+                            <div class="detail-item"><span class="label">Breed:</span> <span class="value">Golden Retriever Mix</span></div>
+                            <div class="detail-item"><span class="label">Age:</span> <span class="value">3 years</span></div>
+                            <div class="detail-item"><span class="label">Temperament:</span> <span class="value">Friendly, Energetic, Playful</span></div>
+                            <div class="detail-item"><span class="label">Vaccinated:</span> <span class="value">Yes</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dog-card" data-category="puppy">
+                    <img src="images/dog2.png" alt="Luna">
+                    <div class="dog-info">
+                        <h3>Luna</h3>
+                        <p>Playful Beagle looking for a family.</p>
+                        <div class="dog-details">
+                            <div class="detail-item"><span class="label">Breed:</span> <span class="value">Beagle</span></div>
+                            <div class="detail-item"><span class="label">Age:</span> <span class="value">2 years</span></div>
+                            <div class="detail-item"><span class="label">Temperament:</span> <span class="value">Playful, Curious, Social</span></div>
+                            <div class="detail-item"><span class="label">Vaccinated:</span> <span class="value">Yes</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dog-card" data-category="senior">
+                    <img src="images/dog3.png" alt="Buddy">
+                    <div class="dog-info">
+                        <h3>Buddy</h3>
+                        <p>Gentle Labrador who loves calm family time.</p>
+                        <div class="dog-details">
+                            <div class="detail-item"><span class="label">Breed:</span> <span class="value">Labrador Retriever</span></div>
+                            <div class="detail-item"><span class="label">Age:</span> <span class="value">4 years</span></div>
+                            <div class="detail-item"><span class="label">Temperament:</span> <span class="value">Gentle, Calm, Loving</span></div>
+                            <div class="detail-item"><span class="label">Vaccinated:</span> <span class="value">Yes</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Ready to Adopt Section -->
+    <section class="ready-to-adopt">
+        <div class="container">
+            <h2>Ready to Adopt?</h2>
+            <p>The adoption process is simple. Contact us to arrange a visit and meet your potential new family member. We'll guide you through every step of the way.</p>
+            <a href="contact.html" class="btn btn-primary">Contact Us About Adoption</a>
+        </div>
+    </section>
+
+</main>
+
+<!-- ==========================================
+     FOOTER
+========================================== -->
+
+<footer>
+
+    <div class="container">
+
+        <div class="footer-grid">
+
+            <!-- About -->
+
+            <div class="footer-column">
+
+                <img src="images/logo.png"
+                     alt="Pawsitive Logo"
+                     class="footer-logo">
+
+                <p>
+
+                    Pawsitive Animal Shelter is a registered NPO and PBO dedicated to rehoming dogs in need.<br>
+                    Every animal deserves love.
+
+                </p>
+
+            </div>
+
+            <!-- Quick Links -->
+
+            <div class="footer-column">
+
+                <h3>Quick Links</h3>
+
+                <ul>
+
+                    <li><a href="home.html">Home</a></li>
+
+                    <li><a href="about.html">About</a></li>
+
+                    <li><a href="dogs.html">Meet Our Dogs</a></li>
+
+                    <li><a href="donate.html">Donate</a></li>
+
+                    <li><a href="contact.html">Contact Us</a></li>
+
+                </ul>
+
+            </div>
+
+            <!-- Contact -->
+
+            <div class="footer-column">
+
+                <h3>Contact</h3>
+
+                <p>Email: pawsitiverasa@gmail.com</p>
+
+                <p>Phone: +27 76 485 4448</p>
+
+                <p>Address: Plot 143 Pretorius street Laezonia, Centurion, Gauteng, 0026</p>
+
+            </div>
+
+            <!-- Social Media -->
+
+            <div class="footer-column">
+
+                <h3>Follow Us</h3>
+
+                <div class="social-icons">
+
+                    <a href="https://www.facebook.com/p/Pawsitive-Animal-Shelter-61573736377122/"><i class="fab fa-facebook-f"></i></a>
+
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <div class="copyright">
+
+            <p>
+
+                © 2026 Pawsitive Animal Shelter. All Rights Reserved.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+<!-- JavaScript -->
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
