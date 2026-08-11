@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="/admin/css/admin.css">
 </head>
 <body>
   <!-- Login -->
@@ -41,7 +41,7 @@
       <button class="nav-btn" data-view="settings">Site settings</button>
       <button class="nav-btn" data-view="setup">Setup / seed</button>
       <div class="sidebar-footer">
-        <a class="nav-btn" href="../home.html" target="_blank" rel="noopener">View website</a>
+        <a class="nav-btn" href="/home.html" target="_blank" rel="noopener">View website</a>
         <button class="nav-btn" id="logout-btn" type="button">Sign out</button>
       </div>
     </aside>
@@ -113,7 +113,7 @@
           <p>After you create the Firebase project and paste config into <code>js/firebase-config.js</code>, create one Auth user (email/password), deploy rules, then seed content.</p>
           <div class="toolbar">
             <button class="btn" id="seed-btn" type="button">Seed default content</button>
-            <a class="btn secondary" href="../FIREBASE_SETUP.md" target="_blank" rel="noopener">Open setup guide</a>
+            <a class="btn secondary" href="/FIREBASE_SETUP.md" target="_blank" rel="noopener">Open setup guide</a>
           </div>
           <p style="color:#777777;font-size:0.9rem">Seeding writes dogs, people, page text, and site settings from the current site defaults. Existing docs with the same IDs are overwritten for settings/pages; dogs/people are added only if those collections are empty.</p>
         </div>
@@ -207,6 +207,6 @@
     </div>
   </div>
 
-  <script type="module" src="js/admin.js"></script>
+  <script type="module" src="/admin/js/admin.js"></script>
 </body>
 </html>

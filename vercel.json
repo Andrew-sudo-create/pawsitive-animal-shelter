@@ -1,7 +1,7 @@
 {
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/admin", "destination": "/admin/index.html" }
+  "redirects": [
+    { "source": "/admin", "destination": "/admin/", "permanent": false }
   ],
   "headers": [
     {
