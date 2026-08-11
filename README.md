@@ -52,8 +52,20 @@ Pawsitive website/
 - HTML5
 - CSS3 (with CSS Grid and Flexbox)
 - Vanilla JavaScript
+- Firebase (Auth, Firestore, Storage) for the admin content portal
+- Hosted on Vercel
 - Font Awesome Icons
 - Google Fonts (Poppins)
+
+## Admin portal (Firebase)
+
+Editors can update dogs, people, page text, and images without changing the site layout.
+
+1. Follow **[FIREBASE_SETUP.md](FIREBASE_SETUP.md)** to connect Firebase
+2. Open `/admin/` and sign in with the single admin account
+3. Manage dogs, people, pages, and site settings
+
+Public pages load published content from Firestore when configured; otherwise the static HTML fallback is shown.
 
 ## Browser Support
 

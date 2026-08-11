@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pawsitive Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <!-- Login -->
+  <section id="login-screen" class="login-screen">
+    <div class="login-card">
+      <h1>Pawsitive Admin</h1>
+      <p>Sign in to manage dogs, images, and page content. The public site layout stays the same.</p>
+      <div id="login-status" class="status info hidden"></div>
+      <form id="login-form" class="grid-2" style="grid-template-columns:1fr">
+        <label>Email
+          <input type="email" id="login-email" required autocomplete="username">
+        </label>
+        <label>Password
+          <input type="password" id="login-password" required autocomplete="current-password">
+        </label>
+        <button class="btn" type="submit">Sign in</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- App -->
+  <div id="admin-app" class="admin-shell hidden">
+    <aside class="admin-sidebar">
+      <div class="admin-brand">
+        Pawsitive
+        <span>Content portal</span>
+      </div>
+      <button class="nav-btn active" data-view="dogs">Dogs gallery</button>
+      <button class="nav-btn" data-view="people">People</button>
+      <button class="nav-btn" data-view="pages">Page text &amp; images</button>
+      <button class="nav-btn" data-view="settings">Site settings</button>
+      <button class="nav-btn" data-view="setup">Setup / seed</button>
+      <div class="sidebar-footer">
+        <a class="nav-btn" href="../home.html" target="_blank" rel="noopener">View website</a>
+        <button class="nav-btn" id="logout-btn" type="button">Sign out</button>
+      </div>
+    </aside>
+
+    <main class="admin-main">
+      <div id="app-status" class="status info hidden"></div>
+
+      <!-- Dogs -->
+      <section id="view-dogs" class="view">
+        <div class="admin-header">
+          <h2>Dogs gallery</h2>
+          <button class="btn" id="add-dog-btn" type="button">Add dog</button>
+        </div>
+        <div class="panel">
+          <p style="margin-top:0;color:#777777">One photo per dog. Published dogs appear on the Meet Our Dogs page; featured dogs can show on Home.</p>
+          <div id="dogs-list" class="card-list"></div>
+        </div>
+      </section>
+
+      <!-- People -->
+      <section id="view-people" class="view hidden">
+        <div class="admin-header">
+          <h2>People</h2>
+          <button class="btn" id="add-person-btn" type="button">Add person</button>
+        </div>
+        <div class="panel">
+          <div class="tabs" id="people-group-tabs">
+            <button class="tab active" data-group="staff" type="button">Staff</button>
+            <button class="tab" data-group="directors" type="button">Directors</button>
+            <button class="tab" data-group="committee" type="button">Committee</button>
+          </div>
+          <div id="people-list" class="card-list"></div>
+        </div>
+      </section>
+
+      <!-- Pages -->
+      <section id="view-pages" class="view hidden">
+        <div class="admin-header">
+          <h2>Page text &amp; images</h2>
+          <button class="btn" id="save-page-btn" type="button">Save page</button>
+        </div>
+        <div class="tabs" id="page-tabs">
+          <button class="tab active" data-page="home" type="button">Home</button>
+          <button class="tab" data-page="about" type="button">About</button>
+          <button class="tab" data-page="dogs" type="button">Dogs</button>
+          <button class="tab" data-page="donate" type="button">Donate</button>
+          <button class="tab" data-page="contact" type="button">Contact</button>
+        </div>
+        <div class="panel" id="page-editor"></div>
+      </section>
+
+      <!-- Settings -->
+      <section id="view-settings" class="view hidden">
+        <div class="admin-header">
+          <h2>Site settings</h2>
+          <button class="btn" id="save-settings-btn" type="button">Save settings</button>
+        </div>
+        <div class="panel" id="settings-editor"></div>
+      </section>
+
+      <!-- Setup -->
+      <section id="view-setup" class="view hidden">
+        <div class="admin-header">
+          <h2>Setup / seed</h2>
+        </div>
+        <div class="panel">
+          <h3>Firebase status</h3>
+          <div id="setup-status" class="status info">Checking…</div>
+          <p>After you create the Firebase project and paste config into <code>js/firebase-config.js</code>, create one Auth user (email/password), deploy rules, then seed content.</p>
+          <div class="toolbar">
+            <button class="btn" id="seed-btn" type="button">Seed default content</button>
+            <a class="btn secondary" href="../FIREBASE_SETUP.md" target="_blank" rel="noopener">Open setup guide</a>
+          </div>
+          <p style="color:#777777;font-size:0.9rem">Seeding writes dogs, people, page text, and site settings from the current site defaults. Existing docs with the same IDs are overwritten for settings/pages; dogs/people are added only if those collections are empty.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Dog modal -->
+  <div id="dog-modal" class="modal-backdrop hidden">
+    <div class="modal">
+      <h3 id="dog-modal-title">Add dog</h3>
+      <form id="dog-form" class="grid-2">
+        <input type="hidden" id="dog-id">
+        <label>Name <input id="dog-name" required></label>
+        <label>Breed <input id="dog-breed" required></label>
+        <label>Age <input id="dog-age" placeholder="e.g. 3 years" required></label>
+        <label>Category
+          <select id="dog-category">
+            <option value="puppy">Puppy</option>
+            <option value="adult" selected>Adult</option>
+            <option value="senior">Senior</option>
+          </select>
+        </label>
+        <label>Temperament <input id="dog-temperament"></label>
+        <label>Vaccinated
+          <select id="dog-vaccinated">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+        </label>
+        <label style="grid-column:1/-1">Description
+          <textarea id="dog-description"></textarea>
+        </label>
+        <label>Order <input id="dog-order" type="number" value="1"></label>
+        <label>Featured on Home
+          <select id="dog-featured">
+            <option value="true">Yes</option>
+            <option value="false" selected>No</option>
+          </select>
+        </label>
+        <label>Published
+          <select id="dog-published">
+            <option value="true" selected>Yes</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>Photo
+          <input id="dog-photo" type="file" accept="image/*">
+        </label>
+        <div style="grid-column:1/-1">
+          <img id="dog-preview" class="preview hidden" alt="Dog preview">
+        </div>
+        <div class="form-actions" style="grid-column:1/-1">
+          <button class="btn ghost" type="button" id="dog-cancel">Cancel</button>
+          <button class="btn" type="submit">Save dog</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Person modal -->
+  <div id="person-modal" class="modal-backdrop hidden">
+    <div class="modal">
+      <h3 id="person-modal-title">Add person</h3>
+      <form id="person-form" class="grid-2">
+        <input type="hidden" id="person-id">
+        <label>Name <input id="person-name" required></label>
+        <label>Role / position <input id="person-role" required></label>
+        <label>Group
+          <select id="person-group">
+            <option value="staff">Staff</option>
+            <option value="directors">Directors</option>
+            <option value="committee">Committee</option>
+          </select>
+        </label>
+        <label>Order <input id="person-order" type="number" value="1"></label>
+        <label style="grid-column:1/-1">Bio
+          <textarea id="person-bio"></textarea>
+        </label>
+        <label>Photo
+          <input id="person-photo" type="file" accept="image/*">
+        </label>
+        <div style="grid-column:1/-1">
+          <img id="person-preview" class="preview hidden" alt="Person preview">
+        </div>
+        <div class="form-actions" style="grid-column:1/-1">
+          <button class="btn ghost" type="button" id="person-cancel">Cancel</button>
+          <button class="btn" type="submit">Save person</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

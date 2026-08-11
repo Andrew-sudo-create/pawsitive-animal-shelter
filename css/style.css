@@ -315,7 +315,7 @@ width:auto;
 
     height:700px;
 
-    background:url("../images/hero.png");
+    background:url("../images/hero.jpg");
 
     background-size:cover;
 
@@ -2677,8 +2677,463 @@ hr{
     height:260px;
 }
 
-.committee-grid .people-content{
+.committee-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.committee-card img{
+
+    width:100%;
+
+    height:230px;
+
+    object-fit:cover;
+
+    border-radius:20px;
+
+    margin-bottom:20px;
+
+}
+
+.committee-card h3{
+
+    font-size:20px;
+
+    color:#262626;
+
+    margin-bottom:12px;
+
+}
+
+.committee-title{
+
+    display:block;
+
+    color:#EF2B2D;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+
+}
+
+
+/* Committee Position */
+
+.committee-info .position{
+
+    color:#EF2B2D !important;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    margin:10px 0 15px;
+
+}
+
+/*=========================================================
+                    COMMITTEE CONTACT
+=========================================================*/
+
+.committee-contact{
+
+    margin-top:20px;
+
+    border-top:1px solid #e5e5e5;
+
+    padding-top:20px;
+
+}
+
+
+.committee-contact p{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-bottom:10px;
+
+    color:#555;
+
+    font-size:15px;
+
+}
+
+.committee-contact i{
+
+    color:#EF2B2D;
+
+    width:20px;
+
+    text-align:center;
+
+}
+
+.committee-card p{
+
+    color:#5b5b5b;
+
+    line-height:1.8;
+
+    font-size:15px;
+
+    margin:0;
+
+}
+
+
+
+/*=========================================================
+                    PEOPLE SECTIONS
+                    Staff / Directors / Committee Members
+=========================================================*/
+
+.people-section{
+
+    background:#ffffff;
+
+    padding:80px 0;
+
+}
+
+.people-section.directors-section{
+
+    background:#f8f8f8;
+
+}
+
+.people-grid{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+    align-items:stretch;
+
+    gap:32px;
+
+}
+
+.people-card{
+
+    background:#f8f8f8;
+
+    border-radius:20px;
+
+    padding:28px 24px 32px;
+
+    text-align:center;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    transition:.35s;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    flex:0 1 320px;
+
+    width:100%;
+
+    max-width:340px;
+
+    box-sizing:border-box;
+
+}
+
+.people-section.directors-section .people-card{
+
+    background:#ffffff;
+
+}
+
+.people-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+/* Portrait frame — taller than square so faces aren't chopped */
+.people-photo{
+
+    width:240px;
+
+    aspect-ratio:3 / 4;
+
+    height:auto;
+
+    margin:0 auto 20px;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    flex-shrink:0;
+
+    background:#e8e8e8;
+
+    position:relative;
+
+}
+
+.people-section .people-card .people-photo img{
+
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+
+    height:100%;
+
+    max-width:none;
+
+    object-fit:cover;
+
+    object-position:center top;
+
+    display:block;
+
+    border-radius:0;
+
+}
+
+.people-content{
+
+    display:flex;
+
+    flex-direction:column;
+
+    flex:1;
+
+    width:100%;
+
+}
+
+.people-content h3{
+
+    font-size:20px;
+
+    color:#262626;
+
+    margin-bottom:6px;
+
+}
+
+.people-content .position,
+.people-content .people-role{
+
+    display:block;
+
+    color:#EF2B2D;
+
+    font-size:14px;
+
+    font-weight:600;
+
+    margin-bottom:12px;
+
+}
+
+.people-content p{
+
+    color:#5b5b5b;
+
+    font-size:14px;
+
+    line-height:1.65;
+
+    margin:0;
+
+}
+
+
+
+@media(max-width:992px){
+
+    .intro-grid,
+    .do-grid,
+    .program-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .about-intro-card,
+    .do-card,
+    .program-card{
+
+        padding:30px;
+
+    }
+
+    .page-hero{
+
+        height:auto;
+
+        padding:70px 0;
+
+    }
+
+    .page-hero-content h1{
+
+        font-size:40px;
+
+    }
+
+    .page-hero-content p{
+
+        font-size:18px;
+
+    }
+
+    .adoption-step{
+
+        grid-template-columns:1fr;
+
+        text-align:left;
+
+    }
+
+    .step-number{
+
+        margin:0 auto;
+
+    }
+
+    .committee-grid{
+
+        grid-template-columns:repeat(2,minmax(0,1fr));
+
+    }
+
+    .people-card{
+
+        flex:0 1 300px;
+
+        max-width:320px;
+
+    }
+
+    .people-photo{
+
+        width:220px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .committee-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .people-card{
+
+        flex:0 1 100%;
+
+        max-width:360px;
+
+        padding:24px 20px 28px;
+
+    }
+
+    .people-photo{
+
+        width:200px;
+
+    }
+
+}
+
+
+
+/*=========================================================
+                    OUR FACILITIES
+=========================================================*/
+
+.facilities-section{
+
+    background:#ffffff;
+
+}
+
+.facilities-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:35px;
+
+    margin-top:60px;
+
+}
+
+.facility-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    border:1px solid #e8e8e8;
+
+    transition:.35s;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+
+}
+
+.facility-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+.facility-card img{
+
+    width:100%;
+
+    height:280px;
+
+    object-fit:cover;
+
+    display:block;
+
+}
+
+.facility-info{
+
     padding:22px;
+
+}
+
+.committee-grid .people-content{
+
+    padding:22px;
+
 }
 
 .committee-grid h3{
@@ -3667,23 +4122,6 @@ hr{
 
     max-width:700px;
 
-    .committee-grid{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .adoption-step{
-
-        grid-template-columns:1fr;
-
-    }
-
-    .step-number{
-
-        margin:0 auto;
-
-    }
     margin:0 auto 40px;
 
     font-size:18px;
