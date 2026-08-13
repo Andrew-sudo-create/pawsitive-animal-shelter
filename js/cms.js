@@ -83,12 +83,11 @@ function dogCardHtml(dog, detailed = true) {
 function personCardHtml(person) {
   const roleClass =
     person.group === "committee" ? "people-role" : "position";
+  const imageUrl = normalizeAssetUrl(person.imageUrl) || "images/logo.png";
   return `
-    <div class="people-card fade">
+    <div class="people-card fade show">
       <div class="people-photo">
-        <img src="${person.imageUrl || "/images/logo.png"}" alt="${escapeAttr(
-    person.name
-  )}">
+        <img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(person.name)}">
       </div>
       <div class="people-content">
         <h3>${escapeHtml(person.name)}</h3>
@@ -96,6 +95,16 @@ function personCardHtml(person) {
         <p>${escapeHtml(person.bio || "")}</p>
       </div>
     </div>`;
+}
+
+function normalizeAssetUrl(url) {
+  if (!url) return "";
+  // Prefer site-root absolute paths so pages work from any route
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
+    return url;
+  }
+  if (url.startsWith("/")) return url;
+  return `/${url.replace(/^\.\//, "")}`;
 }
 
 function escapeHtml(str) {

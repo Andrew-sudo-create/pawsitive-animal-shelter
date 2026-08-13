@@ -2677,6 +2677,10 @@ hr{
     height:260px;
 }
 
+.committee-grid .people-card .people-photo img{
+    height:100% !important;
+}
+
 .committee-card:hover{
 
     transform:translateY(-8px);
@@ -2873,9 +2877,7 @@ hr{
 
     width:240px;
 
-    aspect-ratio:3 / 4;
-
-    height:auto;
+    height:320px;
 
     margin:0 auto 20px;
 
@@ -2891,25 +2893,27 @@ hr{
 
 }
 
-.people-section .people-card .people-photo img{
+.people-section .people-card .people-photo img,
 
-    position:absolute;
+.people-card .people-photo img{
 
-    inset:0;
+    position:static !important;
 
-    width:100%;
+    inset:auto !important;
 
-    height:100%;
+    width:100% !important;
 
-    max-width:none;
+    height:100% !important;
 
-    object-fit:cover;
+    max-width:none !important;
 
-    object-position:center top;
+    object-fit:cover !important;
 
-    display:block;
+    object-position:center top !important;
 
-    border-radius:0;
+    display:block !important;
+
+    border-radius:0 !important;
 
 }
 
@@ -3034,6 +3038,8 @@ hr{
 
         width:220px;
 
+        height:293px;
+
     }
 
 }
@@ -3059,6 +3065,8 @@ hr{
     .people-photo{
 
         width:200px;
+
+        height:267px;
 
     }
 
@@ -3176,6 +3184,11 @@ hr{
     height:320px;
     object-fit:cover;
     object-position:center;
+}
+
+.people-card .people-photo img{
+    width:100% !important;
+    height:100% !important;
 }
 
 /*=========================================================
