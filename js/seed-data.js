@@ -128,6 +128,9 @@ export const seedData = {
       description:
         "Golden retriever, 3 years old. Max is friendly and energetic.",
       imageUrl: "/images/dog1.jpg",
+      imageUrls: ["/images/dog1.jpg"],
+      sex: "Male",
+      isAvailable: true,
       featured: true,
       published: true,
       order: 1,
@@ -142,6 +145,9 @@ export const seedData = {
       description:
         "Luna is a playful Beagle who loves exploring and meeting new families.",
       imageUrl: "/images/dog2.jpg",
+      imageUrls: ["/images/dog2.jpg"],
+      sex: "Female",
+      isAvailable: true,
       featured: true,
       published: true,
       order: 2,
@@ -156,7 +162,37 @@ export const seedData = {
       description:
         "Buddy is a gentle Labrador who enjoys cuddles and calm family time.",
       imageUrl: "/images/dog3.jpg",
+      imageUrls: ["/images/dog3.jpg"],
+      sex: "Male",
+      isAvailable: true,
       featured: true,
+      published: true,
+      order: 3,
+    },
+  ],
+
+  news_posts: [
+    {
+      title: "New rescues this month",
+      summary:
+        "Several dogs have arrived at the shelter and are settling in while they wait for forever homes.",
+      icon: "fa-paw",
+      published: true,
+      order: 1,
+    },
+    {
+      title: "Volunteer day success",
+      summary:
+        "Thank you to everyone who helped with walks, cleaning, and enrichment activities.",
+      icon: "fa-heart",
+      published: true,
+      order: 2,
+    },
+    {
+      title: "Donation drive update",
+      summary:
+        "Food, blankets, and medical supplies donated this month are already making a difference.",
+      icon: "fa-hand-holding-heart",
       published: true,
       order: 3,
     },

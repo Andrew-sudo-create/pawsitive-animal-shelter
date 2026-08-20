@@ -59,9 +59,20 @@ firebase deploy --only firestore:rules,storage
 Or paste the contents of `firestore.rules` and `storage.rules` into the Firebase Console Rules editors and publish.
 
 **Rules summary**
-- Anyone can **read** dogs, people, pages, settings
-- Only a **signed-in** admin can **write**
+- Anyone can **read** dogs, people, pages, settings, news_posts
+- Anyone can **create** `contact_messages` (contact form)
+- Only users listed in the **`admins`** collection can **write** content
 - Storage: public read; authenticated image uploads under 8MB
+
+### Register the first admin (required after rules deploy)
+
+1. Create an Email/Password user in Firebase Authentication
+2. Sign in at `/admin/`
+3. Open **Setup / seed** → **Register me as admin**  
+   (creates `admins/{yourAuthUid}`)
+4. Then run **Seed default content**
+
+If writes fail with “Missing or insufficient permissions”, you are not registered in `admins` yet, or rules are not deployed.
 
 ---
 
@@ -69,9 +80,10 @@ Or paste the contents of `firestore.rules` and `storage.rules` into the Firebase
 
 1. Open `/admin/`
 2. Sign in with the admin user
-3. Go to **Setup / seed** → **Seed default content**
+3. **Register me as admin** (once)
+4. Go to **Setup / seed** → **Seed default content**
 
-This loads dogs, people, page text, bank details, and settings from the current site defaults.
+This loads dogs, people, news posts, page text, bank details, and settings from the current site defaults.
 
 ---
 
@@ -97,11 +109,15 @@ After deploy, open:
 
 | Tab | Actions |
 |-----|---------|
-| **Dogs gallery** | Add / edit / delete dogs (one photo each), featured + published flags |
+| **Dogs gallery** | Add / edit / delete dogs (`sex`, `imageUrls[]`, `isAvailable`, photos), featured + published flags |
 | **People** | Staff, directors, committee photos & bios |
+| **News** | CRUD for Home “Latest News” posts |
+| **Messages** | View contact form submissions |
 | **Page text & images** | Home, About, Dogs, Donate, Contact headlines + hero images |
 | **Site settings** | Logo, contact, footer, bank details, hours |
-| **Setup / seed** | First-time content import |
+| **Setup / seed** | Register admin + first-time content import |
+
+Public features: **Forgot Password** on admin login, **Privacy Policy** page, footer **Admin** link, contact form → Firestore.
 
 The public layout/CSS stays the same; only the data changes.
 
@@ -132,7 +148,10 @@ Donations still use the existing UI. Card payments need PayGate merchant credent
 - [ ] Email/Password auth + 1 admin user  
 - [ ] Firestore + Storage enabled  
 - [ ] `js/firebase-config.js` filled in  
-- [ ] Rules deployed  
+- [ ] **Rules deployed** (`firestore.rules` + `storage.rules`)  
+- [ ] **Register me as admin** from Setup tab  
 - [ ] Seeded from admin  
 - [ ] Redeployed to Vercel  
 - [ ] Client can log into `/admin/` and update a dog  
+- [ ] Test Forgot Password email  
+- [ ] Test Contact form appears under Messages  

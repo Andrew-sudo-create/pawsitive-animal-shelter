@@ -347,35 +347,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /*=========================================================
-    CONTACT FORM VALIDATION
+    CONTACT FORM — handled by js/contact-form.js (Firestore)
 =========================================================*/
-
-const contactForm = document.getElementById("contactForm");
-
-if (contactForm) {
-
-    contactForm.addEventListener("submit", function (event) {
-
-        event.preventDefault();
-
-        const name = document.getElementById("name").value.trim();
-
-        const email = document.getElementById("email").value.trim();
-
-        const message = document.getElementById("message").value.trim();
-
-        if (name === "" || email === "" || message === "") {
-
-            alert("Please complete all required fields.");
-
-            return;
-
-        }
-
-        alert("Thank you for contacting Pawsitive Animal Shelter! We will get back to you as soon as possible.");
-
-        contactForm.reset();
-
-    });
-
-}

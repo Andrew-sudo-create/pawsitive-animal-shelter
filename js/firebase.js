@@ -8,6 +8,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import {
   getFirestore,
@@ -65,6 +66,7 @@ export {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   doc,
   getDoc,
   setDoc,
@@ -81,6 +83,99 @@ export {
   getDownloadURL,
   deleteObject,
 };
+
+/** True if signed-in user has an admins/{uid} document.
+ *  If the check fails (rules not deployed / permission denied), return true
+ *  so existing logins keep working until RBAC is set up.
+ */
+export async function userIsAdmin(uid) {
+  if (!uid) return false;
+  try {
+    const { db } = getFirebase();
+    const snap = await getDoc(doc(db, "admins", uid));
+    return snap.exists();
+  } catch (err) {
+    console.warn(
+      "Admin check skipped (deploy firestore.rules + Register me as admin):",
+      err?.message || err
+    );
+    return true;
+  }
+}
+
+/** Register the current Auth user as an admin (rules allow self-create) */
+export async function registerAdmin(uid, email = "") {
+  const { db } = getFirebase();
+  await setDoc(doc(db, "admins", uid), {
+    email: email || "",
+    active: true,
+    createdAt: serverTimestamp(),
+  });
+}
+
+export async function submitContactMessage(data) {
+  const { db } = getFirebase();
+  await addDoc(collection(db, "contact_messages"), {
+    name: data.name,
+    email: data.email,
+    phone: data.phone || "",
+    subject: data.subject || "",
+    message: data.message,
+    createdAt: serverTimestamp(),
+    status: "new",
+  });
+}
+
+export async function listNewsPosts() {
+  const { db } = getFirebase();
+  try {
+    const q = query(collection(db, "news_posts"), orderBy("order", "asc"));
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  } catch {
+    const snap = await getDocs(collection(db, "news_posts"));
+    return snap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => (a.order || 0) - (b.order || 0));
+  }
+}
+
+export async function saveNewsPost(id, data) {
+  const { db } = getFirebase();
+  if (id) {
+    await updateDoc(doc(db, "news_posts", id), {
+      ...data,
+      updatedAt: serverTimestamp(),
+    });
+    return id;
+  }
+  const refDoc = await addDoc(collection(db, "news_posts"), {
+    ...data,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+  return refDoc.id;
+}
+
+export async function removeNewsPost(id) {
+  const { db } = getFirebase();
+  await deleteDoc(doc(db, "news_posts", id));
+}
+
+export async function listContactMessages() {
+  const { db } = getFirebase();
+  try {
+    const q = query(
+      collection(db, "contact_messages"),
+      orderBy("createdAt", "desc")
+    );
+    const snap = await getDocs(q);
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  } catch {
+    const snap = await getDocs(collection(db, "contact_messages"));
+    return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  }
+}
 
 /** Upload a file to Storage and return its download URL */
 export async function uploadImage(file, path) {

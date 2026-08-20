@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="/admin/css/admin.css">
 </head>
 <body>
@@ -24,6 +25,7 @@
           <input type="password" id="login-password" required autocomplete="current-password">
         </label>
         <button class="btn" type="submit">Sign in</button>
+        <button class="btn ghost" type="button" id="forgot-password-btn">Forgot Password</button>
       </form>
     </div>
   </section>
@@ -37,6 +39,8 @@
       </div>
       <button class="nav-btn active" data-view="dogs">Dogs gallery</button>
       <button class="nav-btn" data-view="people">People</button>
+      <button class="nav-btn" data-view="news">News</button>
+      <button class="nav-btn" data-view="messages">Messages</button>
       <button class="nav-btn" data-view="pages">Page text &amp; images</button>
       <button class="nav-btn" data-view="settings">Site settings</button>
       <button class="nav-btn" data-view="setup">Setup / seed</button>
@@ -77,6 +81,29 @@
         </div>
       </section>
 
+      <!-- News -->
+      <section id="view-news" class="view hidden">
+        <div class="admin-header">
+          <h2>News posts</h2>
+          <button class="btn" id="add-news-btn" type="button">Add post</button>
+        </div>
+        <div class="panel">
+          <p style="margin-top:0;color:#777777">Published posts appear in the Latest News section on the Home page.</p>
+          <div id="news-list" class="card-list"></div>
+        </div>
+      </section>
+
+      <!-- Messages -->
+      <section id="view-messages" class="view hidden">
+        <div class="admin-header">
+          <h2>Contact messages</h2>
+          <button class="btn secondary" id="refresh-messages-btn" type="button">Refresh</button>
+        </div>
+        <div class="panel">
+          <div id="messages-list" class="card-list"></div>
+        </div>
+      </section>
+
       <!-- Pages -->
       <section id="view-pages" class="view hidden">
         <div class="admin-header">
@@ -110,12 +137,13 @@
         <div class="panel">
           <h3>Firebase status</h3>
           <div id="setup-status" class="status info">Checking…</div>
-          <p>After you create the Firebase project and paste config into <code>js/firebase-config.js</code>, create one Auth user (email/password), deploy rules, then seed content.</p>
+          <p>After you create the Firebase project and paste config into <code>js/firebase-config.js</code>, create one Auth user (email/password), deploy rules, register as admin, then seed content.</p>
           <div class="toolbar">
+            <button class="btn secondary" id="register-admin-btn" type="button">Register me as admin</button>
             <button class="btn" id="seed-btn" type="button">Seed default content</button>
             <a class="btn secondary" href="/FIREBASE_SETUP.md" target="_blank" rel="noopener">Open setup guide</a>
           </div>
-          <p style="color:#777777;font-size:0.9rem">Seeding writes dogs, people, page text, and site settings from the current site defaults. Existing docs with the same IDs are overwritten for settings/pages; dogs/people are added only if those collections are empty.</p>
+          <p style="color:#777777;font-size:0.9rem">Seeding writes dogs, people, news, page text, and site settings from the current site defaults. Existing docs with the same IDs are overwritten for settings/pages; dogs/people/news are added only if those collections are empty. You must be registered in the <code>admins</code> collection before writes succeed.</p>
         </div>
       </section>
     </main>
@@ -130,6 +158,13 @@
         <label>Name <input id="dog-name" required></label>
         <label>Breed <input id="dog-breed" required></label>
         <label>Age <input id="dog-age" placeholder="e.g. 3 years" required></label>
+        <label>Sex
+          <select id="dog-sex">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Unknown" selected>Unknown</option>
+          </select>
+        </label>
         <label>Category
           <select id="dog-category">
             <option value="puppy">Puppy</option>
@@ -160,8 +195,17 @@
             <option value="false">No</option>
           </select>
         </label>
-        <label>Photo
+        <label>Available for adoption
+          <select id="dog-available">
+            <option value="true" selected>Yes</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <label>Primary photo
           <input id="dog-photo" type="file" accept="image/*">
+        </label>
+        <label>Extra photos
+          <input id="dog-photos-extra" type="file" accept="image/*" multiple>
         </label>
         <div style="grid-column:1/-1">
           <img id="dog-preview" class="preview hidden" alt="Dog preview">
@@ -207,6 +251,34 @@
     </div>
   </div>
 
-  <script type="module" src="/admin/js/admin.js"></script>
+  <!-- News modal -->
+  <div id="news-modal" class="modal-backdrop hidden">
+    <div class="modal">
+      <h3 id="news-modal-title">Add news post</h3>
+      <form id="news-form" class="grid-2">
+        <input type="hidden" id="news-id">
+        <label style="grid-column:1/-1">Title <input id="news-title" required></label>
+        <label style="grid-column:1/-1">Summary
+          <textarea id="news-summary" required></textarea>
+        </label>
+        <label>Icon (Font Awesome class)
+          <input id="news-icon" placeholder="fa-paw" value="fa-paw">
+        </label>
+        <label>Order <input id="news-order" type="number" value="1"></label>
+        <label>Published
+          <select id="news-published">
+            <option value="true" selected>Yes</option>
+            <option value="false">No</option>
+          </select>
+        </label>
+        <div class="form-actions" style="grid-column:1/-1">
+          <button class="btn ghost" type="button" id="news-cancel">Cancel</button>
+          <button class="btn" type="submit">Save post</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="/admin/js/admin.js?v=20260819b"></script>
 </body>
 </html>

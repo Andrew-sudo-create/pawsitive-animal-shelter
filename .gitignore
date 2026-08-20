@@ -29,3 +29,5 @@ build/
 .env
 .env.local
 .vercel
+
+.firecrawl/

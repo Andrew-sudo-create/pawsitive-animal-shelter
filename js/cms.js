@@ -8,6 +8,7 @@ import {
   getSiteSettings,
   listDogs,
   listPeople,
+  listNewsPosts,
 } from "./firebase.js";
 
 function setText(selector, value) {
@@ -46,10 +47,14 @@ function pageName() {
 }
 
 function dogCardHtml(dog, detailed = true) {
+  const imageUrl =
+    normalizeAssetUrl(dog.imageUrl || dog.imageUrls?.[0]) || "/images/logo.png";
+  const availableLabel =
+    dog.isAvailable === false ? "Not available" : "Available";
   if (detailed) {
     return `
       <div class="dog-card" data-category="${dog.category || "adult"}">
-        <img src="${dog.imageUrl}" alt="${escapeAttr(dog.name)}">
+        <img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(dog.name)}">
         <div class="dog-info">
           <h3>${escapeHtml(dog.name)}</h3>
           <p>${escapeHtml(dog.description || "")}</p>
@@ -60,11 +65,17 @@ function dogCardHtml(dog, detailed = true) {
             <div class="detail-item"><span class="label">Age:</span> <span class="value">${escapeHtml(
               dog.age || ""
             )}</span></div>
+            <div class="detail-item"><span class="label">Sex:</span> <span class="value">${escapeHtml(
+              dog.sex || "Unknown"
+            )}</span></div>
             <div class="detail-item"><span class="label">Temperament:</span> <span class="value">${escapeHtml(
               dog.temperament || ""
             )}</span></div>
             <div class="detail-item"><span class="label">Vaccinated:</span> <span class="value">${escapeHtml(
               dog.vaccinated || ""
+            )}</span></div>
+            <div class="detail-item"><span class="label">Status:</span> <span class="value">${escapeHtml(
+              availableLabel
             )}</span></div>
           </div>
         </div>
@@ -72,11 +83,21 @@ function dogCardHtml(dog, detailed = true) {
   }
   return `
     <div class="dog-card">
-      <img src="${dog.imageUrl}" alt="${escapeAttr(dog.name)}">
+      <img src="${escapeAttr(imageUrl)}" alt="${escapeAttr(dog.name)}">
       <div class="dog-info">
         <h3>${escapeHtml(dog.name)}</h3>
         <p>${escapeHtml(dog.breed || "")}</p>
       </div>
+    </div>`;
+}
+
+function newsCardHtml(post) {
+  const icon = (post.icon || "fa-paw").replace(/^fa-solid\s+/, "");
+  return `
+    <div class="news-card">
+      <i class="fa-solid ${escapeAttr(icon)}"></i>
+      <h3>${escapeHtml(post.title || "")}</h3>
+      <p>${escapeHtml(post.summary || "")}</p>
     </div>`;
 }
 
@@ -155,18 +176,31 @@ async function applySettings(settings) {
   }
 }
 
-async function applyHome(page, dogs) {
-  if (!page) return;
-  setText(".hero-content h1", page.hero?.headline);
-  setText(".hero-content .hero-text", page.hero?.subtext);
-  setBg(".hero", page.hero?.imageUrl);
-  if (page.mission?.title) setText(".mission .section-title h2, .mission-section h2", page.mission.title);
-  if (page.mission?.body) setText("[data-cms='home.mission.body']", page.mission.body);
+async function applyHome(page, dogs, newsPosts = []) {
+  if (page) {
+    setText(".hero-content h1", page.hero?.headline);
+    setText(".hero-content .hero-text", page.hero?.subtext);
+    setBg(".hero", page.hero?.imageUrl);
+    if (page.mission?.title) setText(".mission .section-title h2, .mission-section h2", page.mission.title);
+    if (page.mission?.body) setText("[data-cms='home.mission.body']", page.mission.body);
+  }
 
-  const featured = dogs.filter((d) => d.featured && d.published !== false).slice(0, 3);
-  const grid = document.querySelector("[data-cms-dogs='featured']") || document.querySelector(".dogs-grid");
+  const featured = dogs
+    .filter((d) => d.featured && d.published !== false)
+    .slice(0, 3);
+  const grid =
+    document.querySelector("[data-cms-dogs='featured']") ||
+    document.querySelector(".dogs-grid");
   if (grid && featured.length) {
     grid.innerHTML = featured.map((d) => dogCardHtml(d, false)).join("");
+  }
+
+  const publishedNews = newsPosts
+    .filter((p) => p.published !== false)
+    .slice(0, 3);
+  const newsGrid = document.querySelector("[data-cms-news='home']");
+  if (newsGrid && publishedNews.length) {
+    newsGrid.innerHTML = publishedNews.map(newsCardHtml).join("");
   }
 }
 
@@ -245,16 +279,17 @@ async function boot() {
 
   try {
     const name = pageName();
-    const [settings, page, dogs, people] = await Promise.all([
+    const [settings, page, dogs, people, newsPosts] = await Promise.all([
       getSiteSettings(),
       getPageContent(name),
       listDogs().catch(() => []),
       listPeople().catch(() => []),
+      listNewsPosts().catch(() => []),
     ]);
 
     await applySettings(settings);
 
-    if (name === "home") await applyHome(page, dogs);
+    if (name === "home") await applyHome(page, dogs, newsPosts);
     if (name === "dogs") await applyDogsPage(page, dogs);
     if (name === "about") await applyAbout(page, people);
     if (name === "donate") await applyDonate(page, settings);
