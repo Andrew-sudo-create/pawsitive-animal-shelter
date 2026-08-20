@@ -19,6 +19,8 @@
 
 html{
     scroll-behavior:smooth;
+    overflow-x:hidden;
+    max-width:100%;
 }
 
 body{
@@ -30,6 +32,10 @@ body{
     color:#555;
 
     line-height:1.7;
+
+    overflow-x:hidden;
+
+    max-width:100%;
 
 }
 
@@ -210,6 +216,8 @@ header{
     z-index:999;
 
     box-shadow:0 2px 15px rgba(0,0,0,.05);
+
+    overflow-x:clip;
 
 }
 
@@ -1450,6 +1458,47 @@ footer{
 
 }
 
+@media(max-width:992px){
+
+    .footer-grid{
+
+        grid-template-columns:1fr 1fr;
+
+        gap:30px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .footer-grid{
+
+        grid-template-columns:1fr;
+
+        gap:28px;
+
+    }
+
+    .donation-form-left,
+    .donation-form-right{
+
+        padding:28px 20px;
+
+    }
+
+    .tab-btn{
+
+        padding:12px 10px;
+
+        font-size:0.9rem;
+
+        gap:6px;
+
+    }
+
+}
+
 .footer-logo{
 
     width:180px;
@@ -1705,6 +1754,12 @@ hr{
     color:white;
 
     border-color:var(--primary);
+
+}
+
+.amount-btn.selected:hover{
+
+    color:white;
 
 }
 
@@ -5436,6 +5491,8 @@ SOCIAL MEDIA SECTION
 .map-container iframe{
 
     width:100%;
+
+    max-width:100%;
 
     height:450px;
 
