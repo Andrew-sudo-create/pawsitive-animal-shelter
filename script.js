@@ -349,3 +349,39 @@ document.addEventListener("DOMContentLoaded", () => {
 /*=========================================================
     CONTACT FORM — handled by js/contact-form.js (Firestore)
 =========================================================*/
+
+
+/*=========================================================
+    DONATE: payment type + amount selection
+=========================================================*/
+
+(function initDonateSelection() {
+    const tabButtons = document.querySelectorAll(".payment-type-tabs .tab-btn");
+    const amountButtons = document.querySelectorAll(".amount-buttons .amount-btn");
+    const customAmount = document.querySelector(".custom-amount .form-input");
+
+    if (!tabButtons.length && !amountButtons.length) return;
+
+    tabButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            tabButtons.forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+        });
+    });
+
+    amountButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            amountButtons.forEach((b) => b.classList.remove("selected"));
+            btn.classList.add("selected");
+            if (customAmount) customAmount.value = "";
+        });
+    });
+
+    if (customAmount) {
+        customAmount.addEventListener("input", () => {
+            if (customAmount.value.trim() !== "") {
+                amountButtons.forEach((b) => b.classList.remove("selected"));
+            }
+        });
+    }
+})();
