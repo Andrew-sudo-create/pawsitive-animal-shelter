@@ -611,9 +611,6 @@ async function loadSettingsEditor() {
       <label>Facebook URL <input data-s="social.facebookUrl" value="${escapeAttr(
         data.social?.facebookUrl || ""
       )}"></label>
-      <label>Instagram URL <input data-s="social.instagramUrl" value="${escapeAttr(
-        data.social?.instagramUrl || ""
-      )}"></label>
       <label style="grid-column:1/-1">Footer blurb <textarea data-s="footer.blurb">${escapeHtml(
         data.footer?.blurb || ""
       )}</textarea></label>
