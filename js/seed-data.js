@@ -13,7 +13,6 @@ export const seedData = {
     social: {
       facebookUrl:
         "https://www.facebook.com/p/Pawsitive-Animal-Shelter-61573736377122/",
-      instagramUrl: "",
     },
     footer: {
       blurb:
