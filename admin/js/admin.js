@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   getSiteSettings,
   saveSiteSettings,
   getPageContent,
@@ -14,14 +15,20 @@ import {
   listPeople,
   savePerson,
   removePerson,
+  listNewsPosts,
+  saveNewsPost,
+  removeNewsPost,
+  listContactMessages,
+  userIsAdmin,
+  registerAdmin,
   uploadImage,
   collection,
   getDocs,
   setDoc,
   doc,
   addDoc,
-} from "../../js/firebase.js";
-import { seedData } from "../../js/seed-data.js";
+} from "../../js/firebase.js?v=20260819b";
+import { seedData } from "../../js/seed-data.js?v=20260819b";
 
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
@@ -30,9 +37,11 @@ let currentPage = "home";
 let currentPeopleGroup = "staff";
 let dogsCache = [];
 let peopleCache = [];
+let newsCache = [];
 let pageCache = {};
 let dogImageFile = null;
 let dogImageUrl = "";
+let dogExtraImageUrls = [];
 let personImageFile = null;
 let personImageUrl = "";
 
@@ -73,42 +82,107 @@ async function initAuth() {
 
   const { auth } = getFirebase();
   onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      $("#login-screen").classList.add("hidden");
-      $("#admin-app").classList.remove("hidden");
-      await refreshAll();
-      updateSetupStatus(true, user.email);
-    } else {
+    try {
+      if (user) {
+        let adminOk = true;
+        try {
+          adminOk = await userIsAdmin(user.uid);
+        } catch {
+          adminOk = true;
+        }
+        if (!adminOk) {
+          $("#login-screen").classList.add("hidden");
+          $("#admin-app").classList.remove("hidden");
+          updateSetupStatus(true, user.email, false);
+          setView("setup");
+          showStatus(
+            $("#app-status"),
+            "Signed in. Click Setup → “Register me as admin” before editing content.",
+            "info"
+          );
+          return;
+        }
+        $("#login-screen").classList.add("hidden");
+        $("#admin-app").classList.remove("hidden");
+        await refreshAll();
+        updateSetupStatus(true, user.email, true);
+      } else {
+        $("#login-screen").classList.remove("hidden");
+        $("#admin-app").classList.add("hidden");
+      }
+    } catch (err) {
+      console.error(err);
       $("#login-screen").classList.remove("hidden");
       $("#admin-app").classList.add("hidden");
+      showStatus(
+        loginStatus,
+        err.message || "Could not finish sign-in. Check the browser console.",
+        "err"
+      );
     }
   });
 
   $("#login-form").addEventListener("submit", async (e) => {
     e.preventDefault();
+    showStatus(loginStatus, "Signing in…", "info");
     try {
       await signInWithEmailAndPassword(
         auth,
         $("#login-email").value.trim(),
         $("#login-password").value
       );
-      clearStatus(loginStatus);
+      // onAuthStateChanged will open the app
     } catch (err) {
-      showStatus(loginStatus, err.message || "Login failed", "err");
+      const code = err.code || "";
+      let msg = err.message || "Login failed";
+      if (code === "auth/invalid-credential" || code === "auth/wrong-password") {
+        msg = "Wrong email or password.";
+      } else if (code === "auth/user-not-found") {
+        msg = "No account found for that email. Create the user in Firebase Authentication.";
+      } else if (code === "auth/too-many-requests") {
+        msg = "Too many attempts. Wait a moment or use Forgot Password.";
+      } else if (code === "auth/network-request-failed") {
+        msg = "Network error. Check your connection.";
+      }
+      showStatus(loginStatus, msg, "err");
+    }
+  });
+
+  $("#forgot-password-btn").addEventListener("click", async () => {
+    const email = $("#login-email").value.trim();
+    if (!email) {
+      showStatus(loginStatus, "Enter your email address first, then click Forgot Password.", "err");
+      return;
+    }
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showStatus(
+        loginStatus,
+        "Password reset email sent. Check your inbox (and spam folder).",
+        "ok"
+      );
+    } catch (err) {
+      showStatus(loginStatus, err.message || "Could not send reset email.", "err");
     }
   });
 
   $("#logout-btn").addEventListener("click", () => signOut(auth));
 }
 
-function updateSetupStatus(ok, email = "") {
+function updateSetupStatus(ok, email = "", isAdminUser = false) {
   const el = $("#setup-status");
   if (!isFirebaseConfigured()) {
     showStatus(el, "Config missing in js/firebase-config.js", "err");
     return;
   }
-  if (ok) {
-    showStatus(el, `Connected. Signed in as ${email}`, "ok");
+  if (ok && isAdminUser) {
+    showStatus(el, `Connected as admin: ${email}`, "ok");
+  } else if (ok) {
+    showStatus(
+      el,
+      `Signed in as ${email}, but not registered as admin yet. Click “Register me as admin”.`,
+      "err"
+    );
   } else {
     showStatus(el, "Firebase config found. Sign in to manage content.", "info");
   }
@@ -129,9 +203,9 @@ async function refreshDogs() {
         <img src="${dog.imageUrl || "/images/logo.png"}" alt="${escapeHtml(dog.name)}">
         <div>
           <h4>${escapeHtml(dog.name)}</h4>
-          <p>${escapeHtml(dog.breed || "")} · ${escapeHtml(dog.category || "")} · ${
+          <p>${escapeHtml(dog.breed || "")} · ${escapeHtml(dog.sex || "")} · ${escapeHtml(dog.category || "")} · ${
         dog.published === false ? "Hidden" : "Published"
-      }${dog.featured ? " · Featured" : ""}</p>
+      }${dog.isAvailable === false ? " · Not available" : " · Available"}${dog.featured ? " · Featured" : ""}</p>
         </div>
         <div class="item-actions">
           <button class="btn secondary" data-edit-dog="${dog.id}" type="button">Edit</button>
@@ -149,6 +223,7 @@ function openDogModal(dog = null) {
   $("#dog-name").value = dog?.name || "";
   $("#dog-breed").value = dog?.breed || "";
   $("#dog-age").value = dog?.age || "";
+  $("#dog-sex").value = dog?.sex || "Unknown";
   $("#dog-category").value = dog?.category || "adult";
   $("#dog-temperament").value = dog?.temperament || "";
   $("#dog-vaccinated").value = dog?.vaccinated || "Yes";
@@ -156,9 +231,14 @@ function openDogModal(dog = null) {
   $("#dog-order").value = dog?.order ?? dogsCache.length + 1;
   $("#dog-featured").value = String(Boolean(dog?.featured));
   $("#dog-published").value = String(dog?.published !== false);
+  $("#dog-available").value = String(dog?.isAvailable !== false);
   dogImageFile = null;
-  dogImageUrl = dog?.imageUrl || "";
+  dogImageUrl = dog?.imageUrl || dog?.imageUrls?.[0] || "";
+  dogExtraImageUrls = Array.isArray(dog?.imageUrls)
+    ? dog.imageUrls.slice(1)
+    : [];
   $("#dog-photo").value = "";
+  $("#dog-photos-extra").value = "";
   const preview = $("#dog-preview");
   if (dogImageUrl) {
     preview.src = dogImageUrl;
@@ -184,10 +264,23 @@ async function handleDogSave(e) {
     showStatus($("#app-status"), "Please add a photo for this dog.", "err");
     return;
   }
+
+  const extraFiles = [...($("#dog-photos-extra").files || [])];
+  const uploadedExtras = [];
+  for (const file of extraFiles) {
+    uploadedExtras.push(
+      await uploadImage(file, `dogs/${Date.now()}-${file.name}`)
+    );
+  }
+  const imageUrls = [imageUrl, ...dogExtraImageUrls, ...uploadedExtras].filter(
+    Boolean
+  );
+
   await saveDog(id, {
     name: $("#dog-name").value.trim(),
     breed: $("#dog-breed").value.trim(),
     age: $("#dog-age").value.trim(),
+    sex: $("#dog-sex").value,
     category: $("#dog-category").value,
     temperament: $("#dog-temperament").value.trim(),
     vaccinated: $("#dog-vaccinated").value,
@@ -195,7 +288,9 @@ async function handleDogSave(e) {
     order: Number($("#dog-order").value) || 1,
     featured: $("#dog-featured").value === "true",
     published: $("#dog-published").value === "true",
+    isAvailable: $("#dog-available").value === "true",
     imageUrl,
+    imageUrls,
   });
   closeDogModal();
   showStatus($("#app-status"), "Dog saved.", "ok");
@@ -273,6 +368,101 @@ async function handlePersonSave(e) {
   closePersonModal();
   showStatus($("#app-status"), "Person saved.", "ok");
   await refreshPeople();
+}
+
+/* ---------- News ---------- */
+async function refreshNews() {
+  newsCache = await listNewsPosts();
+  const list = $("#news-list");
+  if (!newsCache.length) {
+    list.innerHTML = `<p style="color:#777777">No news posts yet. Add one or run Seed.</p>`;
+    return;
+  }
+  list.innerHTML = newsCache
+    .map(
+      (post) => `
+      <article class="item-card">
+        <div style="width:56px;height:56px;border-radius:14px;background:#f5f5f5;display:grid;place-items:center;font-size:1.4rem;color:#EF2B2D">
+          <i class="fa-solid ${escapeAttr(post.icon || "fa-paw")}"></i>
+        </div>
+        <div>
+          <h4>${escapeHtml(post.title)}</h4>
+          <p>${escapeHtml(post.summary || "")} · ${
+        post.published === false ? "Hidden" : "Published"
+      }</p>
+        </div>
+        <div class="item-actions">
+          <button class="btn secondary" data-edit-news="${post.id}" type="button">Edit</button>
+          <button class="btn danger" data-delete-news="${post.id}" type="button">Delete</button>
+        </div>
+      </article>`
+    )
+    .join("");
+}
+
+function openNewsModal(post = null) {
+  $("#news-modal").classList.remove("hidden");
+  $("#news-modal-title").textContent = post ? "Edit news post" : "Add news post";
+  $("#news-id").value = post?.id || "";
+  $("#news-title").value = post?.title || "";
+  $("#news-summary").value = post?.summary || "";
+  $("#news-icon").value = post?.icon || "fa-paw";
+  $("#news-order").value = post?.order ?? newsCache.length + 1;
+  $("#news-published").value = String(post?.published !== false);
+}
+
+function closeNewsModal() {
+  $("#news-modal").classList.add("hidden");
+}
+
+async function handleNewsSave(e) {
+  e.preventDefault();
+  const id = $("#news-id").value || null;
+  await saveNewsPost(id, {
+    title: $("#news-title").value.trim(),
+    summary: $("#news-summary").value.trim(),
+    icon: ($("#news-icon").value.trim() || "fa-paw").replace(/^fa-solid\s+/, ""),
+    order: Number($("#news-order").value) || 1,
+    published: $("#news-published").value === "true",
+  });
+  closeNewsModal();
+  showStatus($("#app-status"), "News post saved.", "ok");
+  await refreshNews();
+}
+
+/* ---------- Messages ---------- */
+async function refreshMessages() {
+  const list = $("#messages-list");
+  try {
+    const messages = await listContactMessages();
+    if (!messages.length) {
+      list.innerHTML = `<p style="color:#777777">No contact messages yet.</p>`;
+      return;
+    }
+    list.innerHTML = messages
+      .map((m) => {
+        const when = m.createdAt?.toDate
+          ? m.createdAt.toDate().toLocaleString()
+          : "";
+        return `
+        <article class="item-card">
+          <div>
+            <h4>${escapeHtml(m.name || "Anonymous")}</h4>
+            <p><strong>${escapeHtml(m.email || "")}</strong>${
+          m.phone ? ` · ${escapeHtml(m.phone)}` : ""
+        }${m.subject ? ` · ${escapeHtml(m.subject)}` : ""}${
+          when ? ` · ${escapeHtml(when)}` : ""
+        }</p>
+            <p>${escapeHtml(m.message || "")}</p>
+          </div>
+        </article>`;
+      })
+      .join("");
+  } catch (err) {
+    list.innerHTML = `<p style="color:#777777">${escapeHtml(
+      err.message || "Could not load messages."
+    )}</p>`;
+  }
 }
 
 /* ---------- Pages ---------- */
@@ -512,9 +702,16 @@ async function seedContent() {
     }
   }
 
+  const newsSnap = await getDocs(collection(db, "news_posts"));
+  if (newsSnap.empty && seedData.news_posts?.length) {
+    for (const post of seedData.news_posts) {
+      await addDoc(collection(db, "news_posts"), post);
+    }
+  }
+
   showStatus(
     $("#app-status"),
-    "Seed complete. Settings/pages updated; dogs & people added if collections were empty.",
+    "Seed complete. Settings/pages updated; dogs, people & news added if collections were empty.",
     "ok"
   );
   await refreshAll();
@@ -525,13 +722,15 @@ async function refreshAll() {
     await Promise.all([
       refreshDogs(),
       refreshPeople(),
+      refreshNews(),
+      refreshMessages(),
       loadPageEditor(),
       loadSettingsEditor(),
     ]);
   } catch (err) {
     showStatus(
       $("#app-status"),
-      err.message || "Could not load content. Did you seed Firestore yet?",
+      err.message || "Could not load content. Did you register as admin and seed Firestore yet?",
       "err"
     );
   }
@@ -641,6 +840,52 @@ function bindEvents() {
   $("#seed-btn").addEventListener("click", () => {
     if (!confirm("Seed / update default content in Firebase?")) return;
     seedContent().catch((err) =>
+      showStatus($("#app-status"), err.message, "err")
+    );
+  });
+
+  $("#register-admin-btn").addEventListener("click", async () => {
+    try {
+      const { auth } = getFirebase();
+      const user = auth.currentUser;
+      if (!user) {
+        showStatus($("#app-status"), "Sign in first.", "err");
+        return;
+      }
+      await registerAdmin(user.uid, user.email || "");
+      showStatus(
+        $("#app-status"),
+        "Admin registered. You can now seed and manage content.",
+        "ok"
+      );
+      updateSetupStatus(true, user.email, true);
+      await refreshAll();
+    } catch (err) {
+      showStatus($("#app-status"), err.message || "Could not register admin.", "err");
+    }
+  });
+
+  $("#add-news-btn").addEventListener("click", () => openNewsModal());
+  $("#news-cancel").addEventListener("click", closeNewsModal);
+  $("#news-form").addEventListener("submit", (e) => {
+    handleNewsSave(e).catch((err) =>
+      showStatus($("#app-status"), err.message, "err")
+    );
+  });
+  $("#news-list").addEventListener("click", async (e) => {
+    const editId = e.target.closest("[data-edit-news]")?.dataset.editNews;
+    const deleteId = e.target.closest("[data-delete-news]")?.dataset.deleteNews;
+    if (editId) {
+      openNewsModal(newsCache.find((p) => p.id === editId));
+    }
+    if (deleteId && confirm("Delete this news post?")) {
+      await removeNewsPost(deleteId);
+      await refreshNews();
+    }
+  });
+
+  $("#refresh-messages-btn").addEventListener("click", () => {
+    refreshMessages().catch((err) =>
       showStatus($("#app-status"), err.message, "err")
     );
   });
